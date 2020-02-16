@@ -8,19 +8,19 @@ time_table_drop = "DROP TABLE IF EXISTS time"
 
 # CREATE TABLES
 
-songplay_table_create = ("""CREATE TABLE IF NOT EXISTS songplays (start_time float, user_id int, level varchar, song_id varchar, artist_id varchar, session_id int, location varchar, user_agent varchar)
+songplay_table_create = ("""CREATE TABLE IF NOT EXISTS songplays (songplay_id varchar SERIAL PRIMARY KEY, start_time float NOT NULL, user_id int NOT NULL, level varchar NOT NULL, song_id varchar NOT NULL, artist_id varchar NOT NULL, session_id int, location varchar NOT NULL, user_agent varchar) ON CONFLICT DO NOTHING
 """)
 
-user_table_create = ("""CREATE TABLE IF NOT EXISTS users (user_id int, first_name varchar, last_name varchar, gender varchar, level varchar)
+user_table_create = ("""CREATE TABLE IF NOT EXISTS users (user_id int PRIMARY KEY, first_name varchar, last_name varchar, gender varchar, level varchar) ON CONFLICT DO UPDATE SET level = EXCLUDED.level
 """)
 
-song_table_create = ("""CREATE TABLE IF NOT EXISTS songs (song_id varchar, title varchar, artist_id varchar, year int, duration float)
+song_table_create = ("""CREATE TABLE IF NOT EXISTS songs (song_id varchar PRIMARY KEY, title varchar, artist_id varchar, year int, duration float) ON CONFLICT DO NOTHING
 """)
 
-artist_table_create = ("""CREATE TABLE IF NOT EXISTS artists (artist_id varchar, name varchar, location varchar, latitude float, longitude float)
+artist_table_create = ("""CREATE TABLE IF NOT EXISTS artists (artist_id varchar PRIMARY KEY, name varchar, location varchar, latitude float, longitude float) ON CONFLICT DO NOTHING
 """)
 
-time_table_create = ("""CREATE TABLE IF NOT EXISTS time (start_time float, hour int, day int, week int, month int, year int, weekday int)
+time_table_create = ("""CREATE TABLE IF NOT EXISTS time (start_time float PRIMARY KEY, hour int, day int, week int, month int, year int, weekday int) ON CONFLICT DO NOTHING
 """)
 
 # INSERT RECORDS

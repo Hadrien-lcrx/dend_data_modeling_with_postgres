@@ -1,14 +1,21 @@
-**1 - Discuss the purpose of this database in the context of the startup, Sparkify, and their analytical goals.**
+### How to run the project
+- `create_tables.py` is a script that creates the tables to store our data.  Run this file to reset tables before running ETL scripts. Can be ran from the terminal.
+- `etl.ipynb` is a notebook used to test and design the tables. It reads and processes only one file from `song_data` and `log_data` and loads them into tables. Can be ran from the terminal using Jupyter.
+- `etl.py` is a script that runs the whole pipeline. It reads and processes dagta before writing it into tables. It's the production version of `etl.ipynb`. Can be ran from the terminal.
+- `sql_queries.py` contains the SQL queries imported and used in `create_tables.py`, `etl.ipynb` and `etl.py`.
+
+
+### Purpose of this database
 Sparkify provides a streaming app and wants to analyze their users' listening behavior. To store the data, using JSON files works. But to actually analyze the data, there are better solutions. Creating an actual, organized database is a better solution for analytics. Using the right format when building the tables will ensure that the database is optimized for the business question that matters to Sparkify: understanding users' song listening patterns.
 
 The results of this analysis about users' song listening patterns can then be used to as inputs for a future recommendation engine.
 
 
-**2 - State and justify your database schema design and ETL pipeline.**
+### Schema design and pipeline
 Sparkify is particularly interested in understanding what songs users are listening to. This means we need a fact table referencing song plays, and dimension tables referencing information about the features defining these songplays. Our fact table gathering songplays observations will have information about the songs themselves, as well as the artists performing them, the user who listened to them, and the moment this listening session happened. Therefore, we also need dimension tables for each of these features: songs, artists, users and times.
 
 
-**3 - [Optional] Provide example queries and results for song play analysis.**
+### Example queries
 I may be using it wrong, but I wanted to run a query to get all songplays by a specific user. In `test.ipynb.` though, the columns `song_id` and `artist_id` of `songplays` are always `None`. Same with the `latitude` and `longitude` columns in `artists`.
 
 In `etl.ipynb`, we create `songplays` using the following query:

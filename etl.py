@@ -5,6 +5,9 @@ import pandas as pd
 from sql_queries import *
 
 def get_files(filepath):
+    """
+    Get JSON files from data folder
+    """
     all_files = []
     for root, dirs, files in os.walk(filepath):
         files = glob.glob(os.path.join(root,'*.json'))
@@ -14,6 +17,9 @@ def get_files(filepath):
     return all_files
 
 def process_song_file(cur, filepath):
+    """
+    Allocates song and artist data to respective DataFrames
+    """
     # open song file
     song_files = get_files("data/song_data")
     filepath = song_files[0]
@@ -29,6 +35,9 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """
+    Writes log data to DataFrame
+    """
     # open log file
     log_files = get_files("data/log_data")
     filepath = log_files[0]
@@ -84,6 +93,9 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    Processes files found and indicates how many files were processed
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -103,6 +115,9 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    """
+    Connects to database
+    """
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
