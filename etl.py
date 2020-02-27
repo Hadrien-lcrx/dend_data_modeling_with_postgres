@@ -6,7 +6,11 @@ from sql_queries import *
 
 def get_files(filepath):
     """
-    Get JSON files from data folder
+    Get JSON files from data folder.
+    Args:
+        filepath: The path (string type) to the data folder.
+    Returns:
+        All the files in the data folder.
     """
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -18,12 +22,15 @@ def get_files(filepath):
 
 def process_song_file(cur, filepath):
     """
-    Allocates song and artist data to respective DataFrames
+    Writes song and artist data to Postgres tables.
+    Args:
+        cur: A psycopg2 connection cursor.
+        filepath: The path (string type) to the songs JSON data in string format.
+    Returns:
+        Nothing, but populates the songs and artists Postgres tables.
     """
     # open song file
-    song_files = get_files("data/song_data")
-    filepath = song_files[0]
-    df = pd.DataFrame([pd.read_json(filepath, typ='series')])
+    df = pd.read_json(filepath, lines=True)
 
     # insert song record
     song_data = list(df[["song_id", "title", "artist_id", "year", "duration"]].values[0])
@@ -36,11 +43,14 @@ def process_song_file(cur, filepath):
 
 def process_log_file(cur, filepath):
     """
-    Writes log data to DataFrame
+    Writes logs data to a pandas DataFrame.
+    Args:
+        cur: A psycopg2 connection cursor.
+        filepath: The path (string type) to the logs JSON data.
+    Returns:
+        Nothing, but populates the time, user and songplay Postgres table.
     """
     # open log file
-    log_files = get_files("data/log_data")
-    filepath = log_files[0]
     df = pd.read_json(filepath, lines=True)
 
     # filter by NextSong action
@@ -79,7 +89,7 @@ def process_log_file(cur, filepath):
     for index, row in df.iterrows():
         
         # get songid and artistid from song and artist tables
-        cur.execute(song_select, (row.song, row.artist, row.length))
+        cur.execute(song_select, (str(row.song), str(row.artist), str(row.length)))
         results = cur.fetchone()
         
         if results:
@@ -94,7 +104,14 @@ def process_log_file(cur, filepath):
 
 def process_data(cur, conn, filepath, func):
     """
-    Processes files found and indicates how many files were processed
+    Processes files found and indicates how many files were processed.
+    Args:
+        cur: A psycopg2 connection cursor.
+        conn: A psycopg2 connection.
+        filepath: The path (string type) to the logs JSON data.
+        func: The processing function (either process_song_file() or process_log_file())
+    Returns:
+        Nothing, but populates the time, user and songplay Postgres table.
     """
     # get all files matching extension from directory
     all_files = []
@@ -116,7 +133,11 @@ def process_data(cur, conn, filepath, func):
 
 def main():
     """
-    Connects to database
+    Creates connection, gets cursor, processes files, and closes connection.
+    Args:
+        None.
+    Returns:
+        Nothing, but essentially runs the ETL pipeline.
     """
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()

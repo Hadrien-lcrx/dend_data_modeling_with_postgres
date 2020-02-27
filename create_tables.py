@@ -27,7 +27,12 @@ def create_database():
 
 def drop_tables(cur, conn):
     """
-    Drops tables from database
+    Drops existing tables.
+    Args:
+        cur: A psycopg2 connection cursor.
+        conn: A psycopg2 connection.
+    Returns:
+        Nothing, but drops existing tables.
     """
     for query in drop_table_queries:
         cur.execute(query)
@@ -36,7 +41,12 @@ def drop_tables(cur, conn):
 
 def create_tables(cur, conn):
     """
-    Creates tables in the database
+    Creates tables inthe database.
+    Args:
+        cur: A psycopg2 connection cursor.
+        conn: A psycopg2 connection.
+    Returns:
+        Nothing, but creates tables necessary for inserting data.
     """
     for query in create_table_queries:
         cur.execute(query)
@@ -46,6 +56,13 @@ def create_tables(cur, conn):
 def main():
     """
     Obtains cursor and connection, cleans database and creates tables
+    Args:
+        None.
+    Returns:
+        Nothing, but clears the environment before creating new tables.
+    """
+    """
+    
     """
     cur, conn = create_database()
     
